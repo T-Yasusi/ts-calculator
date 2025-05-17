@@ -1,3 +1,5 @@
+import { add } from './modules/calc/add.js'
+
 const x1=0;
 const x2=1;
 
