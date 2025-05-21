@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "outDir": "./modules",             // 出力先ディレクトリ
+    "rootDir": "./calc",               // ソースファイルのルート
+    "target": "ES2022",                // 出力するJavaScriptのバージョン
+    "module": "ES2022",                // ESModules形式で出力
+    "moduleResolution": "node",       
+    "strict": true,                    // 型チェックを厳密に
+    "esModuleInterop": true,          
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  },
+  "include": ["calc/**/*.ts"],         // コンパイル対象
+  "exclude": ["node_modules", "test", "dist"] // 除外（任意）
+}
