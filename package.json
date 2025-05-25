@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:calc": "tsc -p tsconfig.calc.json"
   },
   "devDependencies": {
     "@babel/cli": "^7.27.2",
@@ -14,12 +15,12 @@
     "@babel/preset-env": "^7.27.2",
     "@babel/preset-typescript": "^7.27.1",
     "@babel/register": "^7.27.1",
+    "gh-pages": "^6.3.0",
     "typescript": "^5.8.3",
     "vite": "^6.3.5"
   },
   "dependencies": {
     "@babel/standalone": "^7.27.2",
-    "monaco-editor": "^0.52.2",
-    "npx": "^10.2.2"
+    "monaco-editor": "^0.52.2"
   }
 }
