@@ -1,15 +1,26 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <title>TypeScript Playground with Operator Overload</title>
+    <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <div id="container" style="width:100vw; height:100vh;"></div>
-    <script type="module" src="/src/main.ts"></script>
-    <div id="app"></div>
+    <h1>TypeScriptと演算子オーバーロード</h1>
+
+    <div class="centering">
+      <label for="template">コード選択:</label>
+      <select id="template">
+	<option value="no-code">-- コードを選択 --</option>
+	<option value="operator">演算子オーバーロード</option>
+      </select>
+      <button id="run">実行</button>
+    </div>
+    
+    <div id="editor"></div>
+    <h2>コード結果出力</h2>
+    <pre id="output"></pre>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

@@ -1,0 +1,46 @@
+/* 全体のサイズと余白 */
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  font-family: 'Courier New', Courier, monospace;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f0f0f0;
+  box-sizing: border-box;
+}
+
+/* 中央揃え用のクラス */
+.centering {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+/* タイトル */
+h1, h2 {
+  text-align: center;
+  margin: 0.5rem;
+}
+
+#editor {
+  flex: 1; /* 残り領域すべてを使う */
+  width: 95%;
+  height: 300px;
+}
+
+/* 出力欄も同様にコード風 */
+#output {
+  width: 95%;
+  min-height: 200px;
+  border: 1px solid #aaa;
+  background-color: #272822;
+  color: #f8f8f2;
+  padding: 1rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  box-sizing: border-box;
+  font-family: 'Fira Code', monospace;
+  margin-bottom: 2rem;
+}

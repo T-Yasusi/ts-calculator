@@ -1,24 +1,29 @@
-import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
+import * as monaco from 'monaco-editor';
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
+const editor = monaco.editor.create(document.getElementById('editor'), {
+  language: 'typescript',
+  theme: 'vs-dark',
+  lineNumbers: 'on',
+  fontSize: 14,
+  automaticLayout: true
+});
 
-setupCounter(document.querySelector('#counter'))
+document.getElementById('template').addEventListener('change', async (e) => {
+    const value = e.target.value;
+    console.log(value);
+    const response = await fetch(`/test/${value}.ts`);
+    const code = await response.text();
+    console.log(code);
+    editor.setValue(code);
+});
+
+document.getElementById('run').addEventListener('click', () => {
+    const code = document.getElementById('editor').value;
+    
+    try {
+	// あくまでテスト用：evalで擬似的に実行（要:今後トランスパイルやsandbox）
+	document.getElementById('output').textContent = String(output);
+    } catch (err) {
+	document.getElementById('output').textContent = String(err);
+    }
+});
