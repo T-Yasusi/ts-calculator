@@ -11,7 +11,7 @@ const editor = monaco.editor.create(document.getElementById('editor'), {
 document.getElementById('template').addEventListener('change', async (e) => {
     const value = e.target.value;
     console.log(value);
-    const response = await fetch(`/test/${value}.ts`);
+    const response = await fetch(`./test/${value}.ts`);
     const code = await response.text();
     console.log(code);
     editor.setValue(code);

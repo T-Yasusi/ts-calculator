@@ -7,8 +7,8 @@ import operatorOverloadPlugin from '../plugins/operator_overload.js';
 
 // 入力・中間・出力ファイルパス（引数等で指定）
 const inputFile = process.argv[2];   // e.g. test/test.ts
-const tempFile = process.argv[3];    // e.g. temp/test.ts
-const outputFile = process.argv[4];  // e.g. test-js/test.js
+const tempFile = path.join('temp', path.basename(inputFile)); // e.g. temp/test.ts
+const outputFile = path.join('test-js', path.basename(inputFile)).replace(/\.ts$/, '.js'); // e.g. test-js/test.js
 
 if (!inputFile || !tempFile || !outputFile) {
   console.error('Usage: node operator_overload.js inputFile tempFile outputFile');

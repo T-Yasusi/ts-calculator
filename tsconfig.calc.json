@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./modules",             // 出力先ディレクトリ
+    "outDir": "./modules/calc/",       // 出力先ディレクトリ
     "rootDir": "./calc",               // ソースファイルのルート
     "target": "ES2022",                // 出力するJavaScriptのバージョン
     "module": "ES2022",                // ESModules形式で出力
