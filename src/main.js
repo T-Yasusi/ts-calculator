@@ -1,4 +1,13 @@
 import * as monaco from 'monaco-editor';
+import * as Babel from '@babel/standalone';
+import operatorOverloadPlugin from '/plugins/operator_overload.js';
+import transformStaticImportToDynamic from '/plugins/transform-static-import-to-dynamic.js';
+import * as esbuild from 'esbuild-wasm';
+
+await esbuild.initialize({
+  wasmURL: `${import.meta.env.BASE_URL}esbuild.wasm`,
+  worker: true,
+});
 
 const editor = monaco.editor.create(document.getElementById('editor'), {
   language: 'typescript',
@@ -17,13 +26,35 @@ document.getElementById('template').addEventListener('change', async (e) => {
     editor.setValue(code);
 });
 
-document.getElementById('run').addEventListener('click', () => {
-    const code = document.getElementById('editor').value;
+document.getElementById('run').addEventListener('click', async () => {
+    const originalCode = editor.getValue();
+    console.log('Original Code', originalCode);
     
-    try {
-	// あくまでテスト用：evalで擬似的に実行（要:今後トランスパイルやsandbox）
-	document.getElementById('output').textContent = String(output);
-    } catch (err) {
-	document.getElementById('output').textContent = String(err);
+    try{
+	const tsCode = Babel.transform(originalCode, {
+	    plugins: [ operatorOverloadPlugin,
+		       transformStaticImportToDynamic ],
+	    filename: 'file.ts',
+	}).code;
+	console.log('TS Code', tsCode);
+
+	const result = await esbuild.transform(tsCode, {
+	    loader: 'ts',
+	    format: 'esm',
+	    sourcemap: false,
+	});
+
+	console.log(result.code);
+	// ▼ Blob＋importによる実行
+	const blob = new Blob([`(async () => { ${result.code} })()`], { type: 'application/javascript' });
+	// const blob = new Blob([result.code], { type: 'application/javascript' });
+	const url = URL.createObjectURL(blob);
+	const mod = await import(/* @vite-ignore */ url);
+	URL.revokeObjectURL(url);	
+	document.getElementById('output').textContent = '成功';
+//	eval(result.code);
+    } catch(err) {
+	console.log('Babel Transpile Error');
+	console.log(err);
     }
 });

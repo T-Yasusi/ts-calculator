@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@babel/standalone": "^7.27.2",
+    "esbuild-wasm": "^0.25.5",
     "monaco-editor": "^0.52.2"
   }
 }
