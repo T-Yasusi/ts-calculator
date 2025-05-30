@@ -5,23 +5,23 @@ import transformStaticImportToDynamic from '/plugins/transform-static-import-to-
 import * as esbuild from 'esbuild-wasm';
 
 await esbuild.initialize({
-  wasmURL: `${import.meta.env.BASE_URL}esbuild.wasm`,
-  worker: true,
+    wasmURL: `${import.meta.env.BASE_URL}esbuild.wasm`,
+    worker: true,
 });
 
 const editor = monaco.editor.create(document.getElementById('editor'), {
-  language: 'typescript',
-  theme: 'vs-dark',
-  lineNumbers: 'on',
-  fontSize: 14,
-  automaticLayout: true
+    language: 'typescript',
+    theme: 'vs-dark',
+    lineNumbers: 'on',
+    fontSize: 14,
+    automaticLayout: true
 });
 
 document.getElementById('template').addEventListener('change', async (e) => {
     const value = e.target.value;
     console.log(value);
     const response = await fetch(`./test/${value}.ts`);
-    const code = await response.text();
+    const code = (await response.text()).replace(/\bconsole\.log\s*\(/g, 'consoleOutput(');
     console.log(code);
     editor.setValue(code);
 });
@@ -51,7 +51,7 @@ document.getElementById('run').addEventListener('click', async () => {
 	const url = URL.createObjectURL(blob);
 	const mod = await import(/* @vite-ignore */ url);
 	URL.revokeObjectURL(url);	
-	document.getElementById('output').textContent = '成功';
+//	document.getElementById('output').textContent = '成功';
 //	eval(result.code);
     } catch(err) {
 	console.log('Babel Transpile Error');
