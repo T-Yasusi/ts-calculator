@@ -1,4 +1,4 @@
-import d {iff } from '../modules/calc/diff.js'
+import diff from '../modules/calc/diff.js'
 import { add, sub, mul, div } from '../modules/calc/operators.js'
 
 const n=2;
