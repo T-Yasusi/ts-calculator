@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "vite build && gh-pages -d dist",
+    "deploy": "node cli/copy_calc.js && vite build && gh-pages -d dist",
     "build:calc": "tsc -p tsconfig.calc.json",
     "build:calc-full": "node cli/calc_operator_overload.js && tsc -p tsconfig.calc.json"
   },
@@ -27,8 +27,5 @@
     "esbuild-wasm": "^0.25.5",
     "fast-glob": "^3.3.3",
     "monaco-editor": "^0.52.2"
-  },
-  {
-    "license": "MIT"
   }
 }
