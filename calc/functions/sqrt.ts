@@ -1,4 +1,4 @@
-import { Complex } from './Complex.js';
+import { Complex } from '../Complex.js';
 import pow from './pow.js';
 import sin from './sin.js';
 import cos from './cos.js';

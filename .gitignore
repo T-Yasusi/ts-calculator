@@ -27,3 +27,4 @@ dist-ssr
 modules/
 temp/
 test-js/
+*~

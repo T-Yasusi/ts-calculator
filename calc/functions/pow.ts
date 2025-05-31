@@ -1,4 +1,4 @@
-import { Complex } from './Complex.js';
+import { Complex } from '../Complex.js';
 import exp from './exp.js';
 import log from './log.js';
 

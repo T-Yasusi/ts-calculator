@@ -1,4 +1,4 @@
-import { Complex } from './Complex.js';
+import { Complex } from '../Complex.js';
 import sinh from './sinh.js';
 import cosh from './cosh.js';
 

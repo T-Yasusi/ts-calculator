@@ -1,5 +1,5 @@
-import { add, sub, mul, div } from './operators.js';
-import { Complex } from './Complex.js';
+import { add, sub, mul, div } from '../operators.js';
+import { Complex } from '../Complex.js';
 import exp from './exp.js';
 
 type InputType = number | Complex;

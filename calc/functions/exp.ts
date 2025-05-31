@@ -1,4 +1,4 @@
-import { Complex } from './Complex.js';
+import { Complex } from '../Complex.js';
 
 type InputType = number | Complex;
 

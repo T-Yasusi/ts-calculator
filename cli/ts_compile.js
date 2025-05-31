@@ -14,7 +14,7 @@ if (!inputFile || !tempFile || !outputFile) {
 }
 
 const inputCode = fs.readFileSync(inputFile, 'utf-8');
-const code = operatorOverload(inputCode, inputCode);
+const code = operatorOverload(inputCode, inputFile);
 fs.writeFileSync(tempFile, code);
 
 try {
