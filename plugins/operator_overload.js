@@ -11,7 +11,7 @@ const unaryOperatorToFunction = {
 };
 
 export default function operatorOverloadPlugin({ types: t }) {
-  console.log("✅ operator_overload plugin loaded");
+//  console.log("✅ operator_overload plugin loaded");
   return {
     visitor: {
       BinaryExpression(path) {
