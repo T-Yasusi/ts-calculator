@@ -27,5 +27,8 @@
     "esbuild-wasm": "^0.25.5",
     "fast-glob": "^3.3.3",
     "monaco-editor": "^0.52.2"
+  },
+  {
+    "license": "MIT"
   }
 }
