@@ -32,21 +32,22 @@ document.getElementById('run').addEventListener('click', async () => {
     
     try{
 	const tsCode = Babel.transform(originalCode, {
+	    presets: [ 'typescript' ],
 	    plugins: [ operatorOverloadPlugin,
 		       transformStaticImportToDynamic ],
 	    filename: 'file.ts',
 	}).code;
 	console.log('TS Code', tsCode);
 
-	const result = await esbuild.transform(tsCode, {
-	    loader: 'ts',
-	    format: 'esm',
-	    sourcemap: false,
-	});
+	// const result = await esbuild.transform(tsCode, {
+	//     loader: 'ts',
+	//     format: 'esm',
+	//     sourcemap: false,
+	// });
 
-	console.log(result.code);
+//	console.log(result.code);
 	// ▼ Blob＋importによる実行
-	const blob = new Blob([`(async () => { ${result.code} })()`], { type: 'application/javascript' });
+	const blob = new Blob([`(async () => { ${tsCode} })()`], { type: 'application/javascript' });
 	// const blob = new Blob([result.code], { type: 'application/javascript' });
 	const url = URL.createObjectURL(blob);
 	const mod = await import(/* @vite-ignore */ url);

@@ -1,6 +1,6 @@
 export default function ({ types: t }) {
     const importDir = '../modules/';
-    const exportDir = location.origin+'/ts-calculator/modules/calc/';
+    const exportDir = location.origin+'/ts-calculator/modules/';
     console.log(exportDir);
     
   return {

@@ -2,7 +2,8 @@
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
-import * as babel from '@babel/standalone';
+import { transformSync } from '@babel/core';
+import syntaxTypeScript from '@babel/plugin-syntax-typescript';
 import operatorOverloadPlugin from '../plugins/operator_overload.js';
 
 // 入力・中間・出力ファイルパス（引数等で指定）
@@ -17,10 +18,15 @@ if (!inputFile || !tempFile || !outputFile) {
 
 // BabelでoperatorOverloadを適用
 const inputCode = fs.readFileSync(inputFile, 'utf-8');
-const { code: transformedCode } = babel.transform(inputCode, {
-  plugins: [[operatorOverloadPlugin, { types: babel.types }]],
+const { code } = transformSync(inputCode, {
+    filename: inputFile,
+    plugins: [
+	syntaxTypeScript,
+        operatorOverloadPlugin,
+    ],
+    sourceType: 'module',
 });
-fs.writeFileSync(tempFile, transformedCode);
+fs.writeFileSync(tempFile, code);
 
 // tscでtempFileをコンパイルしてoutputFileに出力
 try {
