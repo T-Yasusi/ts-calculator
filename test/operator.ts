@@ -1,5 +1,5 @@
-import { add } from '../modules/operators.js'
-import { Complex } from '../modules/Complex.js'
+import { add } from '../modules/calc/operators.js'
+import { Complex } from '../modules/calc/Complex.js'
 
 const x1=0;
 const x2=1;

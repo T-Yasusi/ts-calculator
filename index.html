@@ -3,18 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <title>TypeScript Playground with Operator Overload</title>
+    <script src="js/consoleLogHack.js"></script>
     <link rel="stylesheet" href="./style.css" />
-    <script type="module" crossorigin src="/ts-calculator/assets/index-CiYGniOq.js"></script>
+    <script type="module" crossorigin src="/ts-calculator/assets/index-DcUN5hEW.js"></script>
     <link rel="stylesheet" crossorigin href="/ts-calculator/assets/index-C_y5MonZ.css">
   </head>
   <body>
     <h1>TypeScriptと演算子オーバーロード</h1>
-
+    
     <div class="centering">
       <label for="template">コード選択:</label>
       <select id="template">
 	<option value="no-code">-- コードを選択 --</option>
 	<option value="operator">演算子オーバーロード</option>
+	<option value="newtonRaphson">演算ニュートンラフソン法</option>
       </select>
       <button id="run">実行</button>
     </div>

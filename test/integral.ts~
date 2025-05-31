@@ -1,0 +1,2 @@
+import integral rofm '../modules/calc/integral.js'
+import { add, sub, mul, div } from '../modules/calc/operators.js'
