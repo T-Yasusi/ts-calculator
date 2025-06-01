@@ -1,6 +1,9 @@
 import { Complex } from './Complex.js';
 import trapezoid from './integral/trapezoid.js'
 import simpson from './integral/simpson.js'
+import minusInfToInf from './integral/DE/minusInfToInf.js'
+import zeroToInf from './integral/DE/zeroToInf.js'
+import minusOneToOne from './integral/DE/minusOneToOne.js'
 
 type RealFunction = (x: number) => number;
 type ComplexFunction = (x: Complex) => Complex;
@@ -22,7 +25,22 @@ interface Integral {
         x1: number | Complex,
         N: number
     ): number | Complex;
+
+    minusInfToInf(
+        f: RealFunction | ComplexFunction,
+        threshold: number
+    ): number | Complex;
+
+    zeroToInf(
+        f: RealFunction | ComplexFunction,
+        threshold: number
+    ): number | Complex;
+
+    minusOneToOne(
+        f: RealFunction | ComplexFunction,
+        threshold: number
+    ): number | Complex;
 }
 
-const integral: Integral = { trapezoid, simpson };
+const integral: Integral = { trapezoid, simpson, minusInfToInf, zeroToInf, minusOneToOne };
 export default integral;
