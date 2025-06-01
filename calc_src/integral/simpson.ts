@@ -5,7 +5,7 @@ export default function trapezoid(
     f: ((x: number) => number) | ((x: Complex) => Complex),
     x0: number | Complex,
     x1: number | Complex,
-    N: number = 100
+    N: number = 1000
 ): number | Complex {
     if (typeof x0 === 'number'){
         const dx = (x1 - x0)/N;
@@ -25,7 +25,7 @@ export default function trapezoid(
         for(let i=2; i<N; i+=2) sum2=sum2 + f(x0+i*dx);
         return (dx/3)*(sum0+4*sum1+2*sum2);
     }
-    throw new Error('Invalid input');
+    throw new Error(`Invalid input  ${typeof x0}`);
 }
 
     

@@ -5,7 +5,7 @@ export default function trapezoid(
     f: ((x: number) => number) | ((x: Complex) => Complex),
     x0: number | Complex,
     x1: number | Complex,
-    N: number = 100
+    N: number = 1000
 ): number | Complex {
     if (typeof x0 === 'number'){
         const dx = (x1 - x0)/N;

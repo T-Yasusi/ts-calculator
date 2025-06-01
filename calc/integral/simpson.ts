@@ -1,6 +1,6 @@
 import { Complex } from '../Complex.js';
 import { add, sub, mul, div } from '../operators.js';
-export default function trapezoid(f: ((x: number) => number) | ((x: Complex) => Complex), x0: number | Complex, x1: number | Complex, N: number = 100): number | Complex {
+export default function trapezoid(f: ((x: number) => number) | ((x: Complex) => Complex), x0: number | Complex, x1: number | Complex, N: number = 1000): number | Complex {
   if (typeof x0 === 'number') {
     const dx = div(sub(x1, x0), N);
     let sum0 = add((f as (x: number) => number)(x0), (f as (x: number) => number)(x1 as number));
@@ -19,5 +19,5 @@ export default function trapezoid(f: ((x: number) => number) | ((x: Complex) => 
     for (let i = 2; i < N; i += 2) sum2 = add(sum2, f(add(x0, mul(i, dx))));
     return mul(div(dx, 3), add(add(sum0, mul(4, sum1)), mul(2, sum2)));
   }
-  throw new Error('Invalid input');
+  throw new Error(`Invalid input  ${typeof x0}`);
 }
