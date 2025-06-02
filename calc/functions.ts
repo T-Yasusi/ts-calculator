@@ -11,3 +11,4 @@ export { default as cosh } from './functions/cosh.js';
 export { default as tanh } from './functions/tanh.js';
 
 export { default as isNaN } from './functions/isNaN.js';
+export { default as factorial } from './functions/factorial.js';

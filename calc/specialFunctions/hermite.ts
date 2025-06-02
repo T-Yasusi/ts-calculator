@@ -10,7 +10,7 @@ export default function hermite(n: number, x: InputType): number | Complex {
     for (let i = 2; i < n; i++) {
       a0 = a1;
       a1 = a2;
-      a2 = mul(2, sub(mul(x, a1), a0));
+      a2 = mul(2, sub(mul(x, a1), mul(i, a0)));
     }
     return a2;
   }
