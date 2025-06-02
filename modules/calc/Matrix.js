@@ -1,4 +1,4 @@
-import Vector from './Vector';
+import Vector from './Vector.js';
 export default class Matrix extends Array {
     constructor(rows) {
         if (rows.length === 0) {
@@ -21,9 +21,6 @@ export default class Matrix extends Array {
     }
     get cols() {
         return this[0].length;
-    }
-    toArray() {
-        return this.map(row => [...row]);
     }
     add(other) {
         if (this.rows !== other.rows || this.cols !== other.cols) {

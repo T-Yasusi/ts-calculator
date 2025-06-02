@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "deploy": "node cli/copy_calc.js && vite build && gh-pages -d dist",
     "build:calc": "tsc -p tsconfig.calc.json",
-    "build:calc-full": "node cli/calc_operator_overload.js && tsc -p tsconfig.calc.json"
+    "build:calc-full": "node cli/calc_operator_overload.js && tsc -p tsconfig.calc.json",
+    "check" : "node cli/ts_compile.js public/test/Matrix.ts && node test-js/Matrix.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.27.2",

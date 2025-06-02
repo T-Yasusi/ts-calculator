@@ -1,4 +1,4 @@
-import Vector from './Vector';
+import Vector from './Vector.js';
 
 export default class Matrix extends Array<Vector> {
   constructor(rows: Vector[]) {
@@ -27,16 +27,12 @@ export default class Matrix extends Array<Vector> {
     return this[0].length;
   }
 
-  toArray(): number[][] {
-    return this.map(row => [...row]);
-  }
-
   add(other: Matrix): Matrix {
     if (this.rows !== other.rows || this.cols !== other.cols) {
       throw new Error("Matrix dimensions must match for addition.");
     }
-    const result = this.map((row, i) => row.add(other[i]));
-    return new Matrix(result);
+    const result = this.map((row, i) => row.add(other[i] as Vector));
+    return new Matrix(result as Array<Vector>);
   }
 
   sub(other: Matrix): Matrix {
@@ -44,7 +40,7 @@ export default class Matrix extends Array<Vector> {
       throw new Error("Matrix dimensions must match for subtraction.");
     }
     const result = this.map((row, i) => row.sub(other[i]));
-    return new Matrix(result);
+    return new Matrix(result as Array<Vector>);
   }
 
   mulScalar(scalar: number): Matrix {
@@ -80,7 +76,7 @@ export default class Matrix extends Array<Vector> {
       throw new Error("Matrix-vector multiplication dimension mismatch.");
     }
     const result = this.map(row => row.dot(vector));
-    return new Vector(...result);
+    return new Vector(...(result as Array<number>));
   }
 
   mul(arg: number | Vector | Matrix): Matrix | Vector {
