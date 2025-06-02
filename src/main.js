@@ -1,5 +1,5 @@
 import createMonacoEditor from './createMonacoEditor.js'
-import  babelTransform from './babelTransform.js'
+import babelTransform from './babelTransform.js'
 
 const editor = createMonacoEditor(document.getElementById('editor'));
 
@@ -15,11 +15,11 @@ document.getElementById('template').addEventListener('change', async (e) => {
 
 document.getElementById('run').addEventListener('click', async () => {
     const originalCode = editor.getValue();
-    console.log('Original Code', originalCode);
-    
+    console.log('Original Code', originalCode);    
     try{
 	const tsCode = babelTransform(originalCode);
 	console.log('TS Code', tsCode);
+	document.getElementById('output').innerText = '';
 	const blob = new Blob([`(async () => { ${tsCode} })()`], { type: 'application/javascript' });
 	const url = URL.createObjectURL(blob);
 	const mod = await import(/* @vite-ignore */ url);
