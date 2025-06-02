@@ -5,7 +5,7 @@
     <title>TypeScript Playground with Operator Overload</title>
     <script src="js/consoleLogHack.js"></script>
     <link rel="stylesheet" href="./style.css" />
-    <script type="module" crossorigin src="/ts-calculator/assets/index-DcUN5hEW.js"></script>
+    <script type="module" crossorigin src="/ts-calculator/assets/index-mWAllpOG.js"></script>
     <link rel="stylesheet" crossorigin href="/ts-calculator/assets/index-C_y5MonZ.css">
   </head>
   <body>
@@ -14,11 +14,16 @@
     <div class="centering">
       <label for="template">コード選択:</label>
       <select id="template">
-	<option value="no-code">-- コードを選択 --</option>
-	<option value="operator">演算子オーバーロード</option>
-	<option value="newtonRaphson">演算ニュートンラフソン法</option>
-	<option value="integral">数値積分</option>
+        <option value="no-code">-- コードを選択 --</option>
+        <option value="operator">演算子オーバーロード</option>
+        <option value="newtonRaphson">ニュートンラフソン法</option>
+        <option value="integral">数値積分</option>
+        <option value="DE_integral">広義積分(二重指数積分)</option>
+	<option value="specialFunc/legendre">特殊関数:ルジャンドル関数(直行関係)</option>
+	<option value="specialFunc/hermite">特殊関数:エルミート関数(直行関係)</option>
+	<option value="specialFunc/laguerre">特殊関数:ラゲール関数(直行関係)</option>
       </select>
+
       <button id="run">実行</button>
     </div>
     

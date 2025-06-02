@@ -1,6 +1,6 @@
 import { Complex } from '../Complex.js';
 import { add, sub, mul, div } from '../operators.js';
-export default function trapezoid(f, x0, x1, N = 100) {
+export default function trapezoid(f, x0, x1, N = 1000) {
     if (typeof x0 === 'number') {
         const dx = div(sub(x1, x0), N);
         let val = 0;

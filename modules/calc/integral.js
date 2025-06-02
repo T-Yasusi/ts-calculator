@@ -1,4 +1,7 @@
 import trapezoid from './integral/trapezoid.js';
 import simpson from './integral/simpson.js';
-const integral = { trapezoid, simpson };
+import minusInfToInf from './integral/DE/minusInfToInf.js';
+import zeroToInf from './integral/DE/zeroToInf.js';
+import minusOneToOne from './integral/DE/minusOneToOne.js';
+const integral = { trapezoid, simpson, minusInfToInf, zeroToInf, minusOneToOne };
 export default integral;
