@@ -13,7 +13,10 @@ export default class Matrix extends Array<Vector> {
       && args.every(a=> a.every(a=> a.every(a=> typeof a==='number'))) ){
       super(...args[0].map(a=> new Vector(...a)));
     }
-    else throw new Error('!!! Matrix.constructo Invaild arguments !!!')
+    else{
+      console.log(args);
+      throw new Error('!!! Matrix.constructo Invaild arguments !!!');
+    }
   }
 
   static fromArray(array: number[][]): Matrix {

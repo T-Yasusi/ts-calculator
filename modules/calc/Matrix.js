@@ -13,8 +13,10 @@ export default class Matrix extends Array {
             && args.every(a => a.every(a => a.every(a => typeof a === 'number')))) {
             super(...args[0].map(a => new Vector(...a)));
         }
-        else
+        else {
+            console.log(args);
             throw new Error('!!! Matrix.constructo Invaild arguments !!!');
+        }
     }
     static fromArray(array) {
         const vectors = array.map(row => new Vector(...row));

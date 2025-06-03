@@ -3,7 +3,7 @@ import ComplexVector from './ComplexVector.js'
 import Matrix from './Matrix.js'
 import { add, sub, mul, div } from './operators.js'
 import ComplexMatrix from './ComplexMatrix.js'
-import { toFormattedString } from './util/toFormattedString.js'
+import { toFormattedPrecision } from './util/toFormattedPrecision.js'
 
 export default class Vector extends Array<number> {
   constructor(...elements: [number] | Array<number>) {
@@ -100,13 +100,13 @@ export default class Vector extends Array<number> {
     }
   }
 
-  toEffDigits(effDigits: number=3){
-        console.log('toFormattedString called with effSize=', effDigits);
-
-    const formatted = this.map(x=> toFormattedString(x, effDigits));
-    const maxLength = formatted.reduce((max, s)=> Math.max(max, s.length), 0);
-    const padded = formatted.map(s => s.padStart(maxLength));
+  toPrecision(precision: number, isColumn: boolean = false){
+    const strs = this.map(x=> toFormattedPrecision(x, precision));
+    const maxLength = strs.reduce((max, s)=> Math.max(max, s.length), 0);
+    const padded = strs.map(s => s.padStart(maxLength));
     console.log(padded);
-    return `[ ${padded.join(', ')} ]`;
+    if( isColumn ) return `| ${padded.join(' |\n| ')} |`;
+    else  return `[ ${padded.join(', ')} ]`;  
   }
 }
+

@@ -1,3 +1,5 @@
+import { toFormattedPrecision } from './util/toFormattedPrecision.js'
+
 export class Complex {
   public readonly re: number;
   public readonly im: number;
@@ -62,10 +64,15 @@ export class Complex {
     return this.re === other.re && this.im === other.im;
   }
 
-  toString(): string {
-    if (this.im === 0) return `${this.re}`;
-    if (this.re === 0) return `${this.im}i`;
-    return `${this.re} ${this.im >= 0 ? '+' : '-'} ${Math.abs(this.im)}i`;
+  toPrecision(precision: number = 3): string {
+    const reString = toFormattedPrecision(this.re, precision);
+    const imString = toFormattedPrecision(this.im, precision);
+    if( reString.includes('e-') && imString.includes('e-') ) return '0';
+    else if( imString.includes('e-') ) return reString;
+    else if( reString.includes('e-') ) return imString + 'i';
+    
+    return this.im > 0 ? reString + ' + '+imString : reString + imString.replace('-', '- ')+'i';
   }
+
 }
 
