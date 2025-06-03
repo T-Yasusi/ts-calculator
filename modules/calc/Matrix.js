@@ -1,4 +1,5 @@
 import Vector from './Vector.js';
+import { toFormattedPrecision } from './util/toFormattedPrecision.js';
 export default class Matrix extends Array {
     static get [Symbol.species]() { return Array; }
     constructor(...args) {
@@ -95,8 +96,18 @@ export default class Matrix extends Array {
         }
         return new Matrix(...transposedRows);
     }
-    toString() {
-        console.log('aaa');
-        return this.map(row => row.toString()).join('\n');
+    toPrecision(precision) {
+        const formatted = this.map(row => row.map(x => toFormattedPrecision(x, precision)));
+        let maxLength = 0;
+        for (let i = 0; i < this.cols; i++) {
+            for (let j = 0; j < this.rows; j++) {
+                console.log(formatted[i][j].length);
+                if (maxLength < formatted[i][j].length)
+                    maxLength = formatted[i][j].length;
+            }
+        }
+        //    console.log(maxLength);
+        const padded = formatted.map(row => row.map(s => s.padStart(maxLength)));
+        return padded.map(row => (`| ${row.join(', ')} |`)).join('\n');
     }
 }

@@ -3,6 +3,8 @@ import { Complex } from './Complex.js';
 import ComplexVector from './ComplexVector.js';
 
 export default class ComplexMatrix extends Array<ComplexVector> {
+  static get [Symbol.species]() { return Array; }
+
   constructor(...args: Complex[][] | [number, number]) {
     if( args.length === 2 && args.every(a=> Number.isInteger(a)) ){
       const cols=args[0] as number;
@@ -104,7 +106,18 @@ export default class ComplexMatrix extends Array<ComplexVector> {
     return new ComplexMatrix(...transposedRows);
   }
 
-  toString(): string {
-    return this.map(row => row.toString()).join('\n');
+  toPrecision(precision: number): string {
+    const formatted: string[][] = this.map(row => row.map(x => x.toPrecision(precision)));
+    let maxLength = 0;
+      for( let i=0; i<this.cols; i++){
+        for( let j=0; j<this.rows; j++){
+          console.log(formatted[i][j].length);
+          if( maxLength<formatted[i][j].length ) maxLength = formatted[i][j].length;
+        }
+    }
+//    console.log(maxLength);
+    const padded = formatted.map(row=> row.map(s=> s.padStart(maxLength)) );
+
+    return padded.map(row=> (`| ${row.join(', ')} |`)).join('\n');
   }
 }

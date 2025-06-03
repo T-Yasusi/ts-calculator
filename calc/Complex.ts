@@ -67,11 +67,11 @@ export class Complex {
   toPrecision(precision: number = 3): string {
     const reString = toFormattedPrecision(this.re, precision);
     const imString = toFormattedPrecision(this.im, precision);
-    if( reString.includes('e-') && imString.includes('e-') ) return '0';
-    else if( imString.includes('e-') ) return reString;
-    else if( reString.includes('e-') ) return imString + 'i';
+    if( (reString.includes('e-') || this.re ==0 ) && (imString.includes('e-') || this.im===0) ) return '0';
+    else if( (imString.includes('e-') || this.im===0) ) return reString;
+    else if( (reString.includes('e-') || this.re===0) ) return imString + 'i';
     
-    return this.im > 0 ? reString + ' + '+imString : reString + imString.replace('-', '- ')+'i';
+    return this.im > 0 ? reString + ' + '+imString+'i' : reString + imString.replace('-', ' - ')+'i';
   }
 
 }

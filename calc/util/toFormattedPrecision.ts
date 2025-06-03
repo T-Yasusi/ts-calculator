@@ -3,7 +3,7 @@ export function toFormattedPrecision(x: number, precision: number): string {
 
     const str = x.toPrecision(precision);
     if (str.includes('e')) return str;
-    if (str.length > precision + 2) return x.toExponential(precision);
+    if (str.length > precision + 2) return x.toExponential(precision-1);
 
     return str;
 }
