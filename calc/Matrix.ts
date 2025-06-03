@@ -1,6 +1,8 @@
 import Vector from './Vector.js';
 
 export default class Matrix extends Array<Vector> {
+  static get [Symbol.species]() { return Array; }
+  
   constructor(...args: number[][] | [number, number]) {
     if( args.length === 2 && args.every(a=> Number.isInteger(a)) ){
       const cols=args[0] as number;
