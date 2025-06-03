@@ -1,6 +1,8 @@
 import { Complex } from './Complex.js';
 import Vector from './Vector.js';
-import { add, sub } from './operators.js';
+import Matrix from './Matrix.js';
+import ComplexMatrix from './ComplexMatrix.js';
+import { add, sub, mul } from './operators.js';
 export default class ComplexVector extends Array {
     constructor(...elements) {
         if (elements.length === 1) {
@@ -45,12 +47,25 @@ export default class ComplexVector extends Array {
             throw new Error('Vectors must be the same length');
         return this.reduce((sum, z, i) => sum.add(z.conj().mul(other[i])), new Complex(0, 0));
     }
+    dotMat(other) {
+        if (this.length !== other.cols)
+            throw new Error('Vector * Matrix not match size');
+        const result = new Array(other.rows).fill(new Complex(0, 0));
+        for (let i = 0; i < other.rows; i++) {
+            for (let k = 0; k < this.length; k++)
+                result[i] = add(result[i], mul(this[k].conj(), other[k][i]));
+        }
+        return new ComplexVector(...result);
+    }
     mul(other) {
         if (typeof other === 'number' || other instanceof Complex) {
             return this.scale(other);
         }
         else if (other instanceof Vector || other instanceof ComplexVector) {
             return this.dot(other);
+        }
+        else if (other instanceof Matrix || other instanceof ComplexMatrix) {
+            return this.dotMat(other);
         }
         else {
             throw new Error('Invalid operand for mul: must be number or Vector');

@@ -1,7 +1,12 @@
+import { IMatrix } from './interface/IMatrix.js'
 import Vector from './Vector.js';
+import ComplexVector from './ComplexVector.js'
+import ComplexMatrix from './ComplexMatrix.js'
 import { toFormattedPrecision } from './util/toFormattedPrecision.js'
+import { add, sub, mul, div, neg } from './operators.js'
+import { Complex } from './Complex.js';
 
-export default class Matrix extends Array<Vector> {
+export default class Matrix extends Array<Vector> implements IMatrix {
   static get [Symbol.species]() { return Array; }
 
   constructor(...args: number[][] | [number, number]) {
@@ -22,81 +27,99 @@ export default class Matrix extends Array<Vector> {
     }
   }
 
-  static fromArray(array: number[][]): Matrix {
-    const vectors = array.map(row => new Vector(...row));
-    return new Matrix(...vectors);
-  }
+  get cols(): number { return this.length; }
+  get rows(): number { return this[0].length; }
 
-  get cols(): number {
-    return this.length;
-  }
-
-  get rows(): number {
-    return this[0].length;
-  }
-
-  add(other: Matrix): Matrix {
+  add(other: Matrix | ComplexMatrix ): Matrix | ComplexMatrix {
     if (this.rows !== other.rows || this.cols !== other.cols) {
       throw new Error("Matrix dimensions must match for addition.");
     }
     const result = this.map((row, i) => row.add(other[i] as Vector));
-    return new Matrix(...(result as Array<Vector>));
+    if( other instanceof Matrix ) return new Matrix(...(result as Array<Vector>));
+    else if( other instanceof ComplexMatrix ) return new ComplexMatrix(...(result as Array<ComplexVector>));
+    throw new Error('!!! Matrix.add Invaild type !!!')
   }
 
-  sub(other: Matrix): Matrix {
+  sub(other: Matrix | ComplexMatrix): Matrix | ComplexMatrix {
     if (this.rows !== other.rows || this.cols !== other.cols) {
       throw new Error("Matrix dimensions must match for subtraction.");
     }
     const result = this.map((row, i) => row.sub(other[i]));
-    return new Matrix(...(result as Array<Vector>));
+    if( other instanceof Matrix ) return new Matrix(...(result as Array<Vector>));
+    else if( other instanceof ComplexMatrix ) return new ComplexMatrix(...(result as Array<ComplexVector>));
+    throw new Error('!!! Matrix.add Invaild type !!!')
   }
 
-  mulScalar(scalar: number): Matrix {
-    const result = this.map(row => row.mul(scalar)) as Vector[];
-    return new Matrix(...result);
-  }
-
-  mulMatrix(other: Matrix): Matrix {
-    if (this.cols !== other.rows) {
-      throw new Error("Matrix multiplication dimension mismatch.");
+  mulScalar(scalar: number | Complex): Matrix | ComplexMatrix {
+    if( typeof scalar === 'number'){
+      const result = this.map(row => row.mul(scalar)) as Vector[];
+      return new Matrix(...result);
     }
+    else if( scalar instanceof Complex){
+      const result = this.map(row => row.mul(scalar)) as ComplexVector[];
+      return new ComplexMatrix(...(result));
+    }
+    throw new Error('!!! Matrix.mulScalar Invaild type !!!')
+  }
 
-    const result: Vector[] = [];
+  mulMatrix(other: Matrix | ComplexMatrix ): Matrix | ComplexMatrix {
+    if (this.cols !== other.rows) throw new Error("Matrix multiplication dimension mismatch.");
 
-    for (let i = 0; i < this.rows; i++) {
-      const row = this[i];
-      const newRow: number[] = [];
-      for (let j = 0; j < other.cols; j++) {
-        let sum = 0;
-        for (let k = 0; k < this.cols; k++) {
-          sum += row[k] * other[k][j];
+    if( other instanceof Matrix ){
+      const result: Vector[] = [];
+
+      for (let i = 0; i < this.rows; i++) {
+        const row = this[i];
+        const newRow: number[] = [];
+        for (let j = 0; j < other.cols; j++) {
+          let sum = 0;
+          for (let k = 0; k < this.cols; k++) {
+            sum += row[k] * other[k][j];
+          }
+          newRow.push(sum);
         }
-        newRow.push(sum);
+        result.push(new Vector(...newRow));
       }
-      result.push(new Vector(...newRow));
+      return new Matrix(...result);
     }
+    else if( other instanceof ComplexMatrix ){
+      const result: ComplexVector[] = [];
 
-    return new Matrix(...result);
+      for (let i = 0; i < this.rows; i++) {
+        const row = this[i];
+        const newRow: Complex[] = [];
+        for (let j = 0; j < other.cols; j++) {
+          let sum = new Complex(0, 0);
+          for (let k = 0; k < this.cols; k++) {
+            sum = add(sum, mul(row[k], other[k][j]));
+          }
+          newRow.push(sum);
+        }
+        result.push(new ComplexVector(...newRow));
+      }
+      return new ComplexMatrix(...result);
+    }
+    throw new Error('!!! Matrix.dotMatrix Invaild type !!!');
   }
 
-  mulVector(vector: Vector): Vector {
-    if (this.cols !== vector.length) {
-      throw new Error("Matrix-vector multiplication dimension mismatch.");
-    }
+  mulVector(vector: Vector | ComplexVector): Vector | ComplexVector{
+    if (this.cols !== vector.length) throw new Error("Matrix-vector multiplication dimension mismatch.");
+  
     const result = this.map(row => row.dot(vector));
-    return new Vector(...(result as Array<number>));
+    if( vector instanceof Vector ) return new Vector(...(result as Array<number>));
+    else if( vector instanceof ComplexVector ) return new ComplexVector(...(result as Array<Complex>));
+    throw new Error('!!! Matrix.dotVector Invaild type !!!');
   }
 
-  mul(arg: number | Vector | Matrix): Matrix | Vector {
-    if (typeof arg === "number") {
+  mul(arg: number | Complex | Vector | ComplexVector | Matrix | ComplexMatrix): 
+    Matrix | ComplexMatrix | Vector | ComplexVector {
+    if (typeof arg === "number" || arg instanceof Complex) {
       return this.mulScalar(arg);
-    } else if (arg instanceof Vector) {
+    } else if (arg instanceof Vector || arg instanceof ComplexVector) {
       return this.mulVector(arg);
-    } else if (arg instanceof Matrix) {
+    } else if (arg instanceof Matrix || arg instanceof ComplexMatrix) {
       return this.mulMatrix(arg);
-    } else {
-      throw new Error("Unsupported type for Matrix multiplication.");
-    }
+    } else throw new Error("Unsupported type for Matrix multiplication.");
   }
 
   transpose(): Matrix {
@@ -110,14 +133,7 @@ export default class Matrix extends Array<Vector> {
 
   toPrecision(precision: number): string {
     const formatted: string[][] = this.map(row => row.map(x => toFormattedPrecision(x, precision)));
-    let maxLength = 0;
-      for( let i=0; i<this.cols; i++){
-        for( let j=0; j<this.rows; j++){
-          console.log(formatted[i][j].length);
-          if( maxLength<formatted[i][j].length ) maxLength = formatted[i][j].length;
-        }
-    }
-//    console.log(maxLength);
+    const maxLength = formatted.reduce((max, a)=> Math.max(max, a.reduce((max, s)=> Math.max(max, s.length),0)), 0);
     const padded = formatted.map(row=> row.map(s=> s.padStart(maxLength)) );
 
     return padded.map(row=> (`| ${row.join(', ')} |`)).join('\n');

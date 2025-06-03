@@ -1,3 +1,4 @@
+// import { IVector } from './interface/IVector.js'
 import { Complex } from './Complex.js'
 import ComplexVector from './ComplexVector.js'
 import Matrix from './Matrix.js'
