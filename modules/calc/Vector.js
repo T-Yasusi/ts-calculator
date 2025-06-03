@@ -1,15 +1,25 @@
 import { Complex } from './Complex.js';
 import ComplexVector from './ComplexVector.js';
+import Matrix from './Matrix.js';
 import { add, sub, mul, div } from './operators.js';
+import ComplexMatrix from './ComplexMatrix.js';
+import { toFormattedString } from './util/toFormattedString.js';
 export default class Vector extends Array {
     constructor(...elements) {
-        console.log('Vec Constructor : ', elements);
-        super(...elements);
+        if (elements.length === 1) {
+            const elem = elements[0];
+            if (typeof elem === 'number')
+                super(...(new Array(elem).fill(0)));
+            else if (Array.isArray(elem))
+                super(...elem);
+            else
+                throw new Error('!!! Invalid argument for ComplexVector constructor !!!');
+        }
+        else
+            super(...elements);
         Object.setPrototypeOf(this, Vector.prototype); // 必須
     }
-    norm() {
-        return Math.sqrt(this.reduce((sum, x) => sum + x * x, 0));
-    }
+    norm() { return Math.sqrt(this.reduce((sum, x) => sum + x * x, 0)); }
     normalize() {
         const n = this.norm();
         if (n === 0)
@@ -36,14 +46,14 @@ export default class Vector extends Array {
             return new Vector(...this.map((x, i) => x - other[i]));
         else if (other instanceof ComplexVector)
             return new ComplexVector(...this.map((x, i) => sub(x, other[i])));
-        throw new Error('!!! Vector.add Invaild Type !!!');
+        throw new Error('!!! Vector.sub Invaild Type !!!');
     }
     scale(scalar) {
         if (typeof scalar === 'number')
             return new Vector(...this.map(x => x * scalar));
         else if (scalar instanceof Complex)
             return new ComplexVector(...this.map(x => mul(x, scalar)));
-        throw new Error('!!! Vector.add Invaild Type !!!');
+        throw new Error('!!! Vector.scale Invaild Type !!!');
     }
     dot(other) {
         if (this.length !== other.length)
@@ -52,7 +62,28 @@ export default class Vector extends Array {
             return this.reduce((sum, x, i) => sum + x * other[i], 0);
         else if (other instanceof ComplexVector)
             return this.reduce((sum, x, i) => add(sum, mul(x, other[i])), 0);
-        throw new Error('!!! Vector.add Invaild Type !!!');
+        throw new Error('!!! Vector.dot Invaild Type !!!');
+    }
+    dotMat(other) {
+        if (this.length !== other.cols)
+            throw new Error('Vector * Matrix not match size');
+        if (other instanceof Matrix) {
+            const result = new Array(other.rows).fill(0);
+            for (let i = 0; i < other.rows; i++) {
+                for (let k = 0; k < this.length; k++)
+                    result[i] += this[k] * other[k][i];
+            }
+            return new Vector(...result);
+        }
+        else if (other instanceof ComplexMatrix) {
+            const result = new Array(other.rows).fill(new Complex(0, 0));
+            for (let i = 0; i < other.rows; i++) {
+                for (let k = 0; k < this.length; k++)
+                    result[i] = add(result[i], mul(this[k], other[k][i]));
+            }
+            return new Vector(...result);
+        }
+        throw new Error('!!! Vector.dot Invaild Type !!!');
     }
     div(scalar) {
         if (typeof scalar === 'number' && scalar === 0)
@@ -66,16 +97,26 @@ export default class Vector extends Array {
             return false;
         return this.every((x, i) => x === other[i]);
     }
-    // 汎用的なmul(): scalar ならスカラー倍、Vector なら内積
     mul(other) {
-        if (typeof other === 'number') {
+        if (typeof other === 'number' || other instanceof Complex) {
             return this.scale(other);
         }
-        else if (other instanceof Vector) {
+        else if (other instanceof Vector || other instanceof ComplexVector) {
             return this.dot(other);
+        }
+        else if (other instanceof Matrix || other instanceof ComplexMatrix) {
+            return this.dotMat(other);
         }
         else {
             throw new Error('Invalid operand for mul: must be number or Vector');
         }
+    }
+    toEffDigits(effDigits = 3) {
+        console.log('toFormattedString called with effSize=', effDigits);
+        const formatted = this.map(x => toFormattedString(x, effDigits));
+        const maxLength = formatted.reduce((max, s) => Math.max(max, s.length), 0);
+        const padded = formatted.map(s => s.padStart(maxLength));
+        console.log(padded);
+        return `[ ${padded.join(', ')} ]`;
     }
 }

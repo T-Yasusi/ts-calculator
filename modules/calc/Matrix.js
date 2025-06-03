@@ -1,25 +1,29 @@
 import Vector from './Vector.js';
 export default class Matrix extends Array {
-    constructor(rows) {
-        if (rows.length === 0) {
-            throw new Error("Matrix must have at least one row.");
+    constructor(...args) {
+        if (args.length === 2 && args.every(a => Number.isInteger(a))) {
+            const cols = args[0];
+            const rows = args[1];
+            super(...Array(cols).fill(new Vector(rows)));
         }
-        const width = rows[0].length;
-        for (const row of rows) {
-            if (row.length !== width) {
-                throw new Error("All rows in the matrix must have the same length.");
-            }
+        else if (args.every(a => Array.isArray(a)) && args.every(a => a.every(a => typeof a === 'number'))) {
+            super(...args.map(a => new Vector(...a)));
         }
-        super(...rows);
+        else if (args.every(a => Array.isArray(a)) && args.every(a => a.every(a => Array.isArray(a)))
+            && args.every(a => a.every(a => a.every(a => typeof a === 'number')))) {
+            super(...args[0].map(a => new Vector(...a)));
+        }
+        else
+            throw new Error('!!! Matrix.constructo Invaild arguments !!!');
     }
     static fromArray(array) {
         const vectors = array.map(row => new Vector(...row));
-        return new Matrix(vectors);
-    }
-    get rows() {
-        return this.length;
+        return new Matrix(...vectors);
     }
     get cols() {
+        return this.length;
+    }
+    get rows() {
         return this[0].length;
     }
     add(other) {
@@ -27,18 +31,18 @@ export default class Matrix extends Array {
             throw new Error("Matrix dimensions must match for addition.");
         }
         const result = this.map((row, i) => row.add(other[i]));
-        return new Matrix(result);
+        return new Matrix(...result);
     }
     sub(other) {
         if (this.rows !== other.rows || this.cols !== other.cols) {
             throw new Error("Matrix dimensions must match for subtraction.");
         }
         const result = this.map((row, i) => row.sub(other[i]));
-        return new Matrix(result);
+        return new Matrix(...result);
     }
     mulScalar(scalar) {
         const result = this.map(row => row.mul(scalar));
-        return new Matrix(result);
+        return new Matrix(...result);
     }
     mulMatrix(other) {
         if (this.cols !== other.rows) {
@@ -57,7 +61,7 @@ export default class Matrix extends Array {
             }
             result.push(new Vector(...newRow));
         }
-        return new Matrix(result);
+        return new Matrix(...result);
     }
     mulVector(vector) {
         if (this.cols !== vector.length) {
@@ -86,9 +90,10 @@ export default class Matrix extends Array {
             const col = this.map(row => row[j]);
             transposedRows.push(new Vector(...col));
         }
-        return new Matrix(transposedRows);
+        return new Matrix(...transposedRows);
     }
     toString() {
+        console.log('aaa');
         return this.map(row => row.toString()).join('\n');
     }
 }

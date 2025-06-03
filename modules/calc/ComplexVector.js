@@ -1,9 +1,26 @@
 import { Complex } from './Complex.js';
+import Vector from './Vector.js';
 import { add, sub } from './operators.js';
 export default class ComplexVector extends Array {
     constructor(...elements) {
-        super(...elements);
-        Object.setPrototypeOf(this, ComplexVector.prototype);
+        if (elements.length === 1) {
+            if (typeof elements[0] === 'number')
+                super(...(new Array(elements[0]).fill(0)));
+            else if (Array.isArray(elements[0]))
+                super(...elements[0]);
+            else
+                throw new Error('!!! Invalid argument for ComplexVector constructor !!!');
+        }
+        else
+            super(...elements);
+        Object.setPrototypeOf(this, ComplexVector.prototype); // 必須
+    }
+    norm() { return Math.sqrt(this.reduce((sum, a) => sum + a.abs(), 0)); }
+    normalize() {
+        const n = this.norm();
+        if (n === 0)
+            throw new Error('Cannot normalize zero vector');
+        return this.scale(1 / n);
     }
     add(other) {
         if (this.length !== other.length)
@@ -27,6 +44,17 @@ export default class ComplexVector extends Array {
         if (this.length !== other.length)
             throw new Error('Vectors must be the same length');
         return this.reduce((sum, z, i) => sum.add(z.conj().mul(other[i])), new Complex(0, 0));
+    }
+    mul(other) {
+        if (typeof other === 'number' || other instanceof Complex) {
+            return this.scale(other);
+        }
+        else if (other instanceof Vector || other instanceof ComplexVector) {
+            return this.dot(other);
+        }
+        else {
+            throw new Error('Invalid operand for mul: must be number or Vector');
+        }
     }
     equals(other) {
         if (this.length !== other.length)

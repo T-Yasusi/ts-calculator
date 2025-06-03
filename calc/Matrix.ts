@@ -1,29 +1,31 @@
 import Vector from './Vector.js';
 
 export default class Matrix extends Array<Vector> {
-  constructor(rows: Vector[]) {
-    if (rows.length === 0) {
-      throw new Error("Matrix must have at least one row.");
+  constructor(...args: number[][] | [number, number]) {
+    if( args.length === 2 && args.every(a=> Number.isInteger(a)) ){
+      const cols=args[0] as number;
+      const rows=args[1] as number;
+      super(...Array(cols).fill(new Vector(rows)));
+    }else if( args.every(a=> Array.isArray(a)) && args.every(a=> a.every(a=> typeof a === 'number')) ){
+      super(...args.map(a=> new Vector(...a)));
     }
-    const width = rows[0].length;
-    for (const row of rows) {
-      if (row.length !== width) {
-        throw new Error("All rows in the matrix must have the same length.");
-      }
+    else if( args.every(a=> Array.isArray(a)) && args.every(a=> a.every(a=> Array.isArray(a))) 
+      && args.every(a=> a.every(a=> a.every(a=> typeof a==='number'))) ){
+      super(...args[0].map(a=> new Vector(...a)));
     }
-    super(...rows);
+    else throw new Error('!!! Matrix.constructo Invaild arguments !!!')
   }
 
   static fromArray(array: number[][]): Matrix {
     const vectors = array.map(row => new Vector(...row));
-    return new Matrix(vectors);
-  }
-
-  get rows(): number {
-    return this.length;
+    return new Matrix(...vectors);
   }
 
   get cols(): number {
+    return this.length;
+  }
+
+  get rows(): number {
     return this[0].length;
   }
 
@@ -32,7 +34,7 @@ export default class Matrix extends Array<Vector> {
       throw new Error("Matrix dimensions must match for addition.");
     }
     const result = this.map((row, i) => row.add(other[i] as Vector));
-    return new Matrix(result as Array<Vector>);
+    return new Matrix(...(result as Array<Vector>));
   }
 
   sub(other: Matrix): Matrix {
@@ -40,12 +42,12 @@ export default class Matrix extends Array<Vector> {
       throw new Error("Matrix dimensions must match for subtraction.");
     }
     const result = this.map((row, i) => row.sub(other[i]));
-    return new Matrix(result as Array<Vector>);
+    return new Matrix(...(result as Array<Vector>));
   }
 
   mulScalar(scalar: number): Matrix {
     const result = this.map(row => row.mul(scalar)) as Vector[];
-    return new Matrix(result);
+    return new Matrix(...result);
   }
 
   mulMatrix(other: Matrix): Matrix {
@@ -68,7 +70,7 @@ export default class Matrix extends Array<Vector> {
       result.push(new Vector(...newRow));
     }
 
-    return new Matrix(result);
+    return new Matrix(...result);
   }
 
   mulVector(vector: Vector): Vector {
@@ -97,10 +99,11 @@ export default class Matrix extends Array<Vector> {
       const col = this.map(row => row[j]);
       transposedRows.push(new Vector(...col));
     }
-    return new Matrix(transposedRows);
+    return new Matrix(...transposedRows);
   }
 
   toString(): string {
+    console.log('aaa');
     return this.map(row => row.toString()).join('\n');
   }
 }
