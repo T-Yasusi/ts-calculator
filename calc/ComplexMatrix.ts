@@ -12,7 +12,7 @@ export default class ComplexMatrix extends Array<ComplexVector> implements IComp
     if( args.length === 2 && args.every(a=> Number.isInteger(a)) ){
       const cols=args[0] as number;
       const rows=args[1] as number;
-      super(...Array(cols).fill(new ComplexVector(rows)));
+      super(...Array.from({ length: rows }, ()=> new ComplexVector(rows)));
     }else if( args.every(a=> Array.isArray(a)) && args.every(a=> a.every(a=> a instanceof Complex)) ){
       super(...args.map(a=> new ComplexVector(...a)));
     }

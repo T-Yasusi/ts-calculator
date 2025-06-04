@@ -8,7 +8,7 @@ import { add, sub, mul, div } from './operators.js'
 export default class ComplexVector extends Array<Complex> implements IComplexVector {
   constructor(...elements: [number] | Complex[]) {
     if( elements.length === 1 ){
-      if( typeof elements[0] === 'number' ) super(...(new Array(elements[0]).fill(0)));
+      if( typeof elements[0] === 'number' ) super(...Array.from({ length: elements[0] }, ()=> new Complex(0, 0)));
       else if( Array.isArray(elements[0]) ) super(...elements[0]);
       else throw new Error('!!! Invalid argument for ComplexVector constructor !!!')
     }

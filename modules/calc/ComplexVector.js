@@ -7,7 +7,7 @@ export default class ComplexVector extends Array {
     constructor(...elements) {
         if (elements.length === 1) {
             if (typeof elements[0] === 'number')
-                super(...(new Array(elements[0]).fill(0)));
+                super(...Array.from({ length: elements[0] }, () => new Complex(0, 0)));
             else if (Array.isArray(elements[0]))
                 super(...elements[0]);
             else

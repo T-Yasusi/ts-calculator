@@ -1,0 +1,1 @@
+export { default as gaussianElimination } from './linearAlgebra/gaussianElimination.js'
