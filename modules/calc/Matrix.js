@@ -10,7 +10,7 @@ export default class Matrix extends Array {
         if (args.length === 2 && args.every(a => Number.isInteger(a))) {
             const cols = args[0];
             const rows = args[1];
-            super(...Array(cols).fill(new Vector(rows)));
+            super(...Array.from({ length: cols }, () => new Vector(rows)));
         }
         else if (args.every(a => Array.isArray(a)) && args.every(a => a.every(a => typeof a === 'number'))) {
             super(...args.map(a => new Vector(...a)));
@@ -26,6 +26,8 @@ export default class Matrix extends Array {
     }
     get cols() { return this.length; }
     get rows() { return this[0].length; }
+    rowVector(i) { return new Vector(...this[i]); }
+    colVector(i) { return new Vector(...this.map(row => row[i])); }
     add(other) {
         if (this.rows !== other.rows || this.cols !== other.cols) {
             throw new Error("Matrix dimensions must match for addition.");

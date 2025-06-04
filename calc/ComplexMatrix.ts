@@ -26,6 +26,9 @@ export default class ComplexMatrix extends Array<ComplexVector> implements IComp
   get rows(): number { return this.length; }
   get cols(): number { return this[0].length }
 
+  rowVector(i: number): ComplexVector { return this[i].copy(); };
+  colVector(i: number): ComplexVector { return new ComplexVector(...this.map(row=> row[i].copy())); }; 
+
   add(other: ComplexMatrix | Matrix): ComplexMatrix {
     if (this.rows !== other.rows || this.cols !== other.cols) throw new Error("Matrix dimensions must match for addition.");
     const result = this.map((row, i) => (row.add(other[i])));
@@ -87,6 +90,15 @@ export default class ComplexMatrix extends Array<ComplexVector> implements IComp
       transposedRows.push(new ComplexVector(...col));
     }
     return new ComplexMatrix(...transposedRows);
+  }
+
+  conj(): ComplexMatrix {
+    const conjRows: ComplexVector[] = [];
+    for (let j = 0; j < this.cols; j++) {
+      const col = this.map(row => row[j].conj());
+      conjRows.push(new ComplexVector(...col));
+    }
+    return new ComplexMatrix(...conjRows);
   }
 
   toPrecision(precision: number): string {

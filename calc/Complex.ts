@@ -9,6 +9,8 @@ export class Complex {
     this.im = im;
   }
 
+  copy(): Complex { return new Complex(this.re, this.im); }
+
   add(other: Complex | number): Complex {
     if (typeof other === 'number') {
       return new Complex(this.re + other, this.im);
@@ -52,6 +54,10 @@ export class Complex {
     return new Complex(this.re, -this.im);
   }
 
+  abs2(): number { 
+    return this.re*this.re+this.im*this.im;
+  }
+
   abs(): number {
     return Math.hypot(this.re, this.im);
   }
@@ -67,9 +73,10 @@ export class Complex {
   toPrecision(precision: number = 3): string {
     const reString = toFormattedPrecision(this.re, precision);
     const imString = toFormattedPrecision(this.im, precision);
-    if( (reString.includes('e-') || this.re ==0 ) && (imString.includes('e-') || this.im===0) ) return '0';
-    else if( (imString.includes('e-') || this.im===0) ) return reString;
-    else if( (reString.includes('e-') || this.re===0) ) return imString + 'i';
+    if( (reString.includes('e-') || reString === '0' ) 
+        && (imString.includes('e-') || imString === '0' ) ) return '0';
+    else if( (imString.includes('e-') || imString === '0' ) ) return reString;
+    else if( (reString.includes('e-') || imString === '0' ) ) return imString + 'i';
     
     return this.im > 0 ? reString + ' + '+imString+'i' : reString + imString.replace('-', ' - ')+'i';
   }

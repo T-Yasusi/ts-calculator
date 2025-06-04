@@ -4,6 +4,7 @@ import Vector from './Vector.js';
 import Matrix from './Matrix.js';
 import ComplexMatrix from './ComplexMatrix.js'
 import { add, sub, mul, div } from './operators.js'
+import { abs2 } from './functions.js'
 
 export default class ComplexVector extends Array<Complex> implements IComplexVector {
   constructor(...elements: [number] | Complex[]) {
@@ -15,8 +16,12 @@ export default class ComplexVector extends Array<Complex> implements IComplexVec
     else super(...(elements as Complex[]));
     Object.setPrototypeOf(this, ComplexVector.prototype); // 必須
   }
+
+  copy(): ComplexVector { return new ComplexVector(...this.map(a=> a.copy())); }
   
-  norm() : number { return Math.sqrt(this.reduce((sum, a)=> sum+a.abs(), 0)); }
+  norm() : number { return Math.sqrt(this.reduce((sum, a)=> sum+abs2(a), 0)) };
+; 
+  abs2(): number { return this.reduce((sum, a)=> sum+abs2(a), 0) }
 
   normalize(): ComplexVector {
     const n = this.norm();
@@ -36,7 +41,7 @@ export default class ComplexVector extends Array<Complex> implements IComplexVec
 
   scale(scalar: number | Complex): ComplexVector {
     const s = typeof scalar === 'number' ? new Complex(scalar, 0) : scalar;
-    return new ComplexVector(...this.map(z => z.mul(s)));
+    return new ComplexVector(...this.map(z => z.mul(scalar)));
   }
 
   div(scalar: number | Complex): ComplexVector {
@@ -57,7 +62,16 @@ export default class ComplexVector extends Array<Complex> implements IComplexVec
     }
     return new ComplexVector(...result);
   }
-  
+
+  outerProduct(other: Vector | ComplexVector): ComplexMatrix {
+      const mat = new ComplexMatrix(this.length, other.length);
+      for( let i=0; i<this.length; i++ ){
+        for( let j=0; j<other.length; j++){
+          mat[i][j] = this[i].conj().mul(other[j]);
+        }
+      }
+      return mat;
+  }
 
   mul(other: number | Complex | Vector | ComplexVector | Matrix | ComplexMatrix ): Complex | ComplexVector {
     if (typeof other === 'number' || other instanceof Complex) {
@@ -82,7 +96,6 @@ export default class ComplexVector extends Array<Complex> implements IComplexVec
     const strs = this.map(x=> x.toPrecision(precision));
     const maxLength = strs.reduce((max, s)=> Math.max(max, s.length), 0);
     const padded = strs.map(s => s.padStart(maxLength));
-    console.log(padded);
     if( isColumn ) return `| ${padded.join(' |\n| ')} |`;
     else  return `[ ${padded.join(', ')} ]`;  
   }

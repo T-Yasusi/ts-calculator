@@ -3,6 +3,7 @@ import Vector from './Vector.js';
 import Matrix from './Matrix.js';
 import ComplexMatrix from './ComplexMatrix.js';
 import { add, sub, mul } from './operators.js';
+import { abs2 } from './functions.js';
 export default class ComplexVector extends Array {
     constructor(...elements) {
         if (elements.length === 1) {
@@ -17,7 +18,11 @@ export default class ComplexVector extends Array {
             super(...elements);
         Object.setPrototypeOf(this, ComplexVector.prototype); // 必須
     }
-    norm() { return Math.sqrt(this.reduce((sum, a) => sum + a.abs(), 0)); }
+    copy() { return new ComplexVector(...this.map(a => a.copy())); }
+    norm() { return Math.sqrt(this.reduce((sum, a) => sum + abs2(a), 0)); }
+    ;
+    ;
+    abs2() { return this.reduce((sum, a) => sum + abs2(a), 0); }
     normalize() {
         const n = this.norm();
         if (n === 0)
@@ -36,7 +41,7 @@ export default class ComplexVector extends Array {
     }
     scale(scalar) {
         const s = typeof scalar === 'number' ? new Complex(scalar, 0) : scalar;
-        return new ComplexVector(...this.map(z => z.mul(s)));
+        return new ComplexVector(...this.map(z => z.mul(scalar)));
     }
     div(scalar) {
         const s = typeof scalar === 'number' ? new Complex(scalar, 0) : scalar;
@@ -56,6 +61,15 @@ export default class ComplexVector extends Array {
                 result[i] = add(result[i], mul(this[k].conj(), other[k][i]));
         }
         return new ComplexVector(...result);
+    }
+    outerProduct(other) {
+        const mat = new ComplexMatrix(this.length, other.length);
+        for (let i = 0; i < this.length; i++) {
+            for (let j = 0; j < other.length; j++) {
+                mat[i][j] = this[i].conj().mul(other[j]);
+            }
+        }
+        return mat;
     }
     mul(other) {
         if (typeof other === 'number' || other instanceof Complex) {
@@ -81,7 +95,6 @@ export default class ComplexVector extends Array {
         const strs = this.map(x => x.toPrecision(precision));
         const maxLength = strs.reduce((max, s) => Math.max(max, s.length), 0);
         const padded = strs.map(s => s.padStart(maxLength));
-        console.log(padded);
         if (isColumn)
             return `| ${padded.join(' |\n| ')} |`;
         else

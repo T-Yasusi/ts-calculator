@@ -19,6 +19,7 @@ export default class Vector extends Array<number> {
   }
 
   norm(): number { return Math.sqrt(this.reduce((sum, x) => sum + x * x, 0)); }
+  abs2(): number { return this.reduce((sum, x)=> sum + x * x, 0) }
 
   normalize(): Vector {
     const n = this.norm();
@@ -74,8 +75,18 @@ export default class Vector extends Array<number> {
       return new Vector(...result);
     }
     throw new Error('!!! Vector.dot Invaild Type !!!');
-
   }
+
+
+  outerProduct(other: Vector | ComplexVector): Matrix | ComplexMatrix {
+      const mat = other instanceof Vector ? new Matrix(this.length, other.length) : new ComplexMatrix(this.length, other.length);
+      for( let i=0; i<this.length; i++ ){
+        for( let j=0; j<other.length; j++){
+          mat[i][j] = mul(this[i], other[j]);
+        }
+      }
+      return mat;
+    }
 
   div(scalar: number | Complex ): Vector | ComplexVector{
     if( typeof scalar === 'number' && scalar === 0) throw new Error('Division by zero');
@@ -88,7 +99,7 @@ export default class Vector extends Array<number> {
     return this.every((x, i) => x === other[i]);
   }
 
-  mul(other: number | Complex | Vector | ComplexVector | Matrix | ComplexMatrix): 
+  mul(other: number | Complex | Vector | ComplexVector | Matrix | ComplexMatrix):
          Vector | ComplexVector | number | Complex {
     if (typeof other === 'number' || other instanceof Complex) {
       return this.scale(other);
@@ -105,9 +116,8 @@ export default class Vector extends Array<number> {
     const strs = this.map(x=> toFormattedPrecision(x, precision));
     const maxLength = strs.reduce((max, s)=> Math.max(max, s.length), 0);
     const padded = strs.map(s => s.padStart(maxLength));
-    console.log(padded);
     if( isColumn ) return `| ${padded.join(' |\n| ')} |`;
-    else  return `[ ${padded.join(', ')} ]`;  
+    else  return `[ ${padded.join(', ')} ]`;
   }
 }
 

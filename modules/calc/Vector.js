@@ -21,6 +21,7 @@ export default class Vector extends Array {
         Object.setPrototypeOf(this, Vector.prototype); // 必須
     }
     norm() { return Math.sqrt(this.reduce((sum, x) => sum + x * x, 0)); }
+    abs2() { return this.reduce((sum, x) => sum + x * x, 0); }
     normalize() {
         const n = this.norm();
         if (n === 0)
@@ -86,6 +87,15 @@ export default class Vector extends Array {
         }
         throw new Error('!!! Vector.dot Invaild Type !!!');
     }
+    outerProduct(other) {
+        const mat = other instanceof Vector ? new Matrix(this.length, other.length) : new ComplexMatrix(this.length, other.length);
+        for (let i = 0; i < this.length; i++) {
+            for (let j = 0; j < other.length; j++) {
+                mat[i][j] = mul(this[i], other[j]);
+            }
+        }
+        return mat;
+    }
     div(scalar) {
         if (typeof scalar === 'number' && scalar === 0)
             throw new Error('Division by zero');
@@ -116,7 +126,6 @@ export default class Vector extends Array {
         const strs = this.map(x => toFormattedPrecision(x, precision));
         const maxLength = strs.reduce((max, s) => Math.max(max, s.length), 0);
         const padded = strs.map(s => s.padStart(maxLength));
-        console.log(padded);
         if (isColumn)
             return `| ${padded.join(' |\n| ')} |`;
         else
