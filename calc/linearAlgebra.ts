@@ -2,5 +2,6 @@ export { default as gaussianElimination } from './linearAlgebra/gaussianEliminat
 export { default as householderQR } from './linearAlgebra/householderQR.js'
 export { default as doolittleLU } from './linearAlgebra/doolittleLU.js'
 export { default as croutLU } from './linearAlgebra/croutLU.js'
+export { default as frame } from './linearAlgebra/frame.js'
 
 

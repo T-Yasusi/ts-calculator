@@ -17,9 +17,9 @@ export default function (cofficients: number[] | Complex[], thre: number = 10e-1
   } else if (cofficients.length === 3) {
     const D = sqrt(sub(mul(cofficients[1], cofficients[1]), mul(mul(4, cofficients[0]), cofficients[2])));
     if (D instanceof Complex) {
-      result.push(div(add(neg(cofficients[1]), D), mul(2, cofficients[0])), div(add(neg(cofficients[1]), D), mul(2, cofficients[0])));
+      result.push(div(add(neg(cofficients[1]), D), mul(2, cofficients[0])), div(sub(neg(cofficients[1]), D), mul(2, cofficients[0])));
     } else {
-      result.push(new Complex(div(add(neg(cofficients[1]), D), mul(2, cofficients[0])), 0), new Complex(div(add(neg(cofficients[1]), D), mul(2, cofficients[0])), 0));
+      result.push(new Complex(div(add(neg(cofficients[1]), D), mul(2, cofficients[0])), 0), new Complex(div(sub(neg(cofficients[1]), D), mul(2, cofficients[0])), 0));
     }
   }
   return result;

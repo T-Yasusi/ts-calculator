@@ -9,6 +9,7 @@ export function createUnitMatrix(n: number): Matrix {
 }
 
 export function createUnitComplexMatrix(n: number): ComplexMatrix {
+    console.log(n);
     const E=new ComplexMatrix(n, n);
     for( let i=0; i<n; i++) E[i][i]=new Complex(1, 0);
     return E;

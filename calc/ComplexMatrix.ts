@@ -9,6 +9,7 @@ export default class ComplexMatrix extends Array<ComplexVector> implements IComp
   static get [Symbol.species]() { return Array; }
 
   constructor(...args: Complex[][] | [number, number]) {
+    console.log(args, args.length, args.every(a=> Number.isInteger(a)));
     if( args.length === 2 && args.every(a=> Number.isInteger(a)) ){
       const cols=args[0] as number;
       const rows=args[1] as number;
@@ -20,7 +21,7 @@ export default class ComplexMatrix extends Array<ComplexVector> implements IComp
       && args.every(a=> a.every(a=> a.every(a=> a instanceof Complex))) ){
       super(...args[0].map(a=> new ComplexVector(...a)));
     }
-    else throw new Error('!!! ComplexMatrix.constructo Invaild arguments !!!')
+    else throw new Error('!!! ComplexMatrix.constructor Invaild arguments !!!')
   }
 
   get rows(): number { return this.length; }
