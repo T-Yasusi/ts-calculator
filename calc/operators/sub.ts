@@ -1,3 +1,5 @@
+import neg from './neg.js';
+
 type Subtractable =
   | number
   | bigint
@@ -17,8 +19,9 @@ function sub(a: Subtractable, b: Subtractable): any {
 
   if (typeof a === 'object' && a !== null && typeof a.sub === 'function') return a.sub(b);
   if (typeof b === 'object' && b !== null && typeof b.sub === 'function') {
-    // 通常b.sub(a)は意味が違うので、ここは呼ばない方がよい
-    throw new Error('Subtraction method found on second operand, but not used for safety');
+    // -(b-a) として呼ぶ
+    return neg(b.sub(a));
+//    throw new Error('Subtraction method found on second operand, but not used for safety');
   }
 
   throw new Error(
