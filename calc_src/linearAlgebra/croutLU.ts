@@ -25,26 +25,23 @@ export default function doolittleLU(mat: Matrix | ComplexMatrix ):
             swapRow(L, i, pivot);
             swapRow(P, i, pivot);
         }
- 
-        // --- U の行 i を計算 ---
+
         for (let j = i; j < A.cols; j++) {
             let sum = 0;
-            for (let k = 0; k < i; k++) {
-                sum = sum + L[i][k] * U[k][j];
-            }
-            U[i][j] = A[i][j] - sum;
-        }
-
-        // --- L の列 i を計算（対角は1） ---
-        L[i][i] = 1;
-        for (let j = i + 1; j < A.cols; j++) {
-            let sum = 0;
-            for (let k = 0; k < i; k++) {
+            for (let k = 0; k < j; k++) {
                 sum = sum + L[j][k] * U[k][i];
             }
-            L[j][i] = (A[j][i] - sum) / U[i][i];
+            L[j][i] = A[j][i] - sum;
+        }   
+
+        U[i][i] = 1;
+        for (let j = i + 1; j < A.cols; j++) {
+            let sum = 0;
+            for (let k = 0; k < j; k++) {
+                sum = sum + L[i][k] * U[k][j];
+            }
+            U[i][j] = (A[i][j] - sum) / L[i][i];
         }
     }
-
     return { L, U, P };   
 }
