@@ -23,7 +23,7 @@ export default class Matrix extends Array<Vector> implements IMatrix {
     }
     else{
       console.log(args);
-      throw new Error('!!! Matrix.constructo Invaild arguments !!!');
+      throw new Error('!!! Matrix.constructor Invaild arguments !!!');
     }
   }
 
@@ -35,6 +35,7 @@ export default class Matrix extends Array<Vector> implements IMatrix {
 
   add(other: Matrix | ComplexMatrix ): Matrix | ComplexMatrix {
     if (this.rows !== other.rows || this.cols !== other.cols) {
+      console.log(this, other)
       throw new Error("Matrix dimensions must match for addition.");
     }
     const result = this.map((row, i) => row.add(other[i] as Vector));
@@ -45,6 +46,7 @@ export default class Matrix extends Array<Vector> implements IMatrix {
 
   sub(other: Matrix | ComplexMatrix): Matrix | ComplexMatrix {
     if (this.rows !== other.rows || this.cols !== other.cols) {
+      console.log(this, other)
       throw new Error("Matrix dimensions must match for subtraction.");
     }
     const result = this.map((row, i) => row.sub(other[i]));

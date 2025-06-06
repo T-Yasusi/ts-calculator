@@ -29,10 +29,7 @@ export default class Vector extends Array {
         return this.scale(1 / n);
     }
     add(other) {
-        console.log('Vector.add ', this, other);
-        console.log(this.map);
         const result = this.map((x, i) => mul(x, other[i]));
-        console.log('Check :', ...result);
         if (this.length !== other.length)
             throw new Error('Vectors must be the same length');
         if (other instanceof Vector)

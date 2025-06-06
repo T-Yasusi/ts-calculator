@@ -19,10 +19,8 @@ export default class ComplexVector extends Array<Complex> implements IComplexVec
 
   copy(): ComplexVector { return new ComplexVector(...this.map(a=> a.copy())); }
   
-  norm() : number { return Math.sqrt(this.reduce((sum, a)=> sum+abs2(a), 0)) };
-; 
+  norm() : number { return Math.sqrt(this.reduce((sum, a)=> sum+abs2(a), 0)) }
   abs2(): number { return this.reduce((sum, a)=> sum+abs2(a), 0) }
-
   normalize(): ComplexVector {
     const n = this.norm();
     if (n === 0) throw new Error('Cannot normalize zero vector');

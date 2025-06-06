@@ -20,8 +20,6 @@ export default class ComplexVector extends Array {
     }
     copy() { return new ComplexVector(...this.map(a => a.copy())); }
     norm() { return Math.sqrt(this.reduce((sum, a) => sum + abs2(a), 0)); }
-    ;
-    ;
     abs2() { return this.reduce((sum, a) => sum + abs2(a), 0); }
     normalize() {
         const n = this.norm();

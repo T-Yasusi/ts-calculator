@@ -21,7 +21,7 @@ export default class Matrix extends Array {
         }
         else {
             console.log(args);
-            throw new Error('!!! Matrix.constructo Invaild arguments !!!');
+            throw new Error('!!! Matrix.constructor Invaild arguments !!!');
         }
     }
     get cols() { return this.length; }
@@ -30,6 +30,7 @@ export default class Matrix extends Array {
     colVector(i) { return new Vector(...this.map(row => row[i])); }
     add(other) {
         if (this.rows !== other.rows || this.cols !== other.cols) {
+            console.log(this, other);
             throw new Error("Matrix dimensions must match for addition.");
         }
         const result = this.map((row, i) => row.add(other[i]));
@@ -41,6 +42,7 @@ export default class Matrix extends Array {
     }
     sub(other) {
         if (this.rows !== other.rows || this.cols !== other.cols) {
+            console.log(this, other);
             throw new Error("Matrix dimensions must match for subtraction.");
         }
         const result = this.map((row, i) => row.sub(other[i]));

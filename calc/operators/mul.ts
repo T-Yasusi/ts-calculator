@@ -1,3 +1,5 @@
+import { Matrix, ComplexMatrix, Complex, Vector, ComplexVector } from '../classes.js'
+
 type Multipliable =
   | number
   | bigint
@@ -14,7 +16,9 @@ function mul(a: Multipliable, b: Multipliable): any {
   if (typeof a === 'string' || typeof b === 'string') {
     throw new Error('Multiplication not supported for strings');
   }
-
+  if( a instanceof Complex && ( b instanceof Matrix || b instanceof ComplexMatrix || b instanceof Vector || b instanceof ComplexVector ) ){
+    return b.mul(a);
+  }
   if (typeof a === 'object' && a !== null && typeof a.mul === 'function') {
     return a.mul(b);
   }

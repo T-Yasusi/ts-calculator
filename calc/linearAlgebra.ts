@@ -4,4 +4,9 @@ export { default as doolittleLU } from './linearAlgebra/doolittleLU.js'
 export { default as croutLU } from './linearAlgebra/croutLU.js'
 export { default as frame } from './linearAlgebra/frame.js'
 
+export { default as eigenVectorFromValue } from './linearAlgebra/eigenVectorFromValue.js'
+
+export { createUnitMatrix } from './linearAlgebra/createUnitMatrix.js'
+export { createUnitComplexMatrix } from './linearAlgebra/createUnitMatrix.js'
+
 

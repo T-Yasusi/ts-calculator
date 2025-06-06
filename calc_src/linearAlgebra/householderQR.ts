@@ -3,9 +3,7 @@ import Matrix from '../Matrix.js'
 import ComplexMatrix from '../ComplexMatrix.js'
 import { add, sub, mul, div, neg } from '../operators.js'
 import { createUnitMatrix, createUnitComplexMatrix } from './createUnitMatrix.js'
-import { abs, exp } from '../functions.js'
-import searchPivot from './searchPivot.js'
-import swapRow from './swapRow.js'
+import { abs, exp } from '../functions.js';
 
 export default function householderQR(mat: Matrix | ComplexMatrix ):    
     { Q: Matrix | ComplexMatrix; R: Matrix | ComplexMatrix }
@@ -23,10 +21,8 @@ export default function householderQR(mat: Matrix | ComplexMatrix ):
 
         if( v.norm() === 0 ) continue;
         if( mat instanceof Matrix ) v[i] = (v[i] as number)>=0 ? v[i]+v.norm() : v[i]-v.norm();
-        else{
-            console.log((v[i] as Complex).arg());
-            v[i] =  v[i]+exp(new Complex(0, i)*(v[i] as Complex).arg())*v.norm();
-        }        
+        else v[i] =  v[i]+exp(new Complex(0, i)*(v[i] as Complex).arg())*v.norm();
+     
 //        console.log('u =', v.toPrecision(4));
 
         v = v.normalize();
@@ -35,7 +31,7 @@ export default function householderQR(mat: Matrix | ComplexMatrix ):
         for( let i=0; i<mat.cols; i++ ) H[i][i] = H[i][i]+1;
         if( mat instanceof ComplexMatrix ) H=H.conj();
 //        console.log('H =\n', H.toPrecision(4));
-        R = H.conj()*R;
+        R = mat instanceof Matrix ? H*R : H.conj()*R;
         Q = Q*H;
 
  //       console.log('check =\n', (Q*R).toPrecision(4));
@@ -53,7 +49,7 @@ export default function householderQR(mat: Matrix | ComplexMatrix ):
         } 
             */
     }
-    console.log('====== FINISH =======');
+//    console.log('====== FINISH =======');
 //    if( mat instanceof Matrix ) console.log('Q^T*Q =\n', (Q.transpose()*Q).toPrecision(3));
 //    else console.log('Q^T*Q =\n', ((Q as ComplexMatrix).conj()*Q).toPrecision(3));
 //    console.log('Input =\n', mat.toPrecision(3));

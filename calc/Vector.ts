@@ -28,10 +28,7 @@ export default class Vector extends Array<number> {
   }
 
   add(other: Vector | ComplexVector ): Vector | ComplexVector {
-    console.log('Vector.add ', this, other);
-    console.log(this.map);
     const result = this.map((x, i) => mul(x, other[i]));
-    console.log('Check :', ...result);
     if (this.length !== other.length) throw new Error('Vectors must be the same length');
     if (other instanceof Vector ) return new Vector(...this.map((x, i) => x + other[i]));
     else if(other instanceof ComplexVector ) return new ComplexVector(...this.map((x, i) => add(x, other[i])));
