@@ -1,11 +1,38 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
+    <script>self["MonacoEnvironment"] = (function (paths) {
+          return {
+            globalAPI: true,
+            getWorkerUrl : function (moduleId, label) {
+              var result =  paths[label];
+              if (/^((http:)|(https:)|(file:)|(\/\/))/.test(result)) {
+                var currentUrl = String(window.location);
+                var currentOrigin = currentUrl.substr(0, currentUrl.length - window.location.hash.length - window.location.search.length - window.location.pathname.length);
+                if (result.substring(0, currentOrigin.length) !== currentOrigin) {
+                  var js = '/*' + label + '*/importScripts("' + result + '");';
+                  var blob = new Blob([js], { type: 'application/javascript' });
+                  return URL.createObjectURL(blob);
+                }
+              }
+              return result;
+            }
+          };
+        })({
+  "typescript": "/ts-calculator/monacoeditorwork/ts.worker.bundle.js",
+  "javascript": "/ts-calculator/monacoeditorwork/ts.worker.bundle.js"
+});</script>
+
     <meta charset="UTF-8" />
     <title>TypeScript Playground with Operator Overload</title>
+    <!-- <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script> -->
+    <!-- <script src="https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js"></script> -->
+
     <script src="js/consoleLogHack.js"></script>
+
     <link rel="stylesheet" href="./style.css" />
-    <script type="module" crossorigin src="/ts-calculator/assets/index-mWAllpOG.js"></script>
+    <link rel="stylesheet" href="./modal.css" />
+    <script type="module" crossorigin src="/ts-calculator/assets/index-DOulSNDr.js"></script>
     <link rel="stylesheet" crossorigin href="/ts-calculator/assets/index-C_y5MonZ.css">
   </head>
   <body>
@@ -15,15 +42,28 @@
       <label for="template">コード選択:</label>
       <select id="template">
         <option value="no-code">-- コードを選択 --</option>
-        <option value="operator">演算子オーバーロード</option>
-        <option value="newtonRaphson">ニュートンラフソン法</option>
-        <option value="integral">数値積分</option>
-        <option value="DE_integral">広義積分(二重指数積分)</option>
-	<option value="specialFunc/legendre">特殊関数:ルジャンドル関数(直行関係)</option>
-	<option value="specialFunc/hermite">特殊関数:エルミート関数(直行関係)</option>
-	<option value="specialFunc/laguerre">特殊関数:ラゲール関数(直行関係)</option>
+        <option value="test_test">テスト</option>
+	<option value="graphic/threeBody">微分方程式:3体問題</option>
+	<option value="graphic/lorenz">微分方程式:ローレンツアトラクタ</option>
+        <option value="test/operator">演算子オーバーロード</option>
+        <option value="test/newtonRaphson">ニュートンラフソン法</option>
+        <option value="test/integral">数値積分</option>
+        <option value="test/DE_integral">広義積分(二重指数積分)</option>
+	<option value="test/specialFunc/legendre">特殊関数:ルジャンドル関数(直行関係)</option>
+	<option value="graphic/specialFunc/legendre">特殊関数:ルジャンドル関数(グラフ描画)</option>
+	<option value="test/specialFunc/hermite">特殊関数:エルミート関数(直行関係)</option>
+	<option value="graphic/specialFunc/hermite">特殊関数:エルミート関数(グラフ描画)</option>
+	<option value="test/specialFunc/laguerre">特殊関数:ラゲール関数(直行関係)</option>
+	<option value="graphic/specialFunc/laguerre">特殊関数:ラゲール関数(グラフ描画)</option>
+	<option value="test/specialFunc/associatedLegendre">特殊関数:ルジャンドル倍関数(直行関係)</option>
+	<option value="test/specialFunc/normalizedAssociatedLegendre">特殊関数:正規化されたルジャンドル倍関数(直行関係)</option>
+	<option value="graphic/specialFunc/normalizedAssociatedLegendre">特殊関数:正規化されたルジャンドル倍関数(グラフ描画)</option>
+	<option value="test/specialFunc/associatedLaguerre">特殊関数:ラゲール倍関数(直行関係)</option>
+	<option value="graphic/specialFunc/associatedLaguerre">特殊関数:ラゲール倍関数(グラフ描画)</option>
+	<option value="test/linearAlgebra/gaussanElimination">線形代数:逆行列(ガウスの消去法)</option>
+	<option value="test/linearAlgebra/householderQR">線形代数:QR分解(ハウスホルダー変換)</option>
+	<option value="test/linearAlgebra/LUDecompose">線形代数:LU分解</option>
       </select>
-
       <button id="run">実行</button>
     </div>
     
@@ -31,5 +71,20 @@
     <h2>コード結果出力</h2>
     <pre id="output"></pre>
 
+
+    
+    <div id="modal-wrapper0" class="modal-wrapper">
+      <div id="modal0" class="modal">
+      </div>
+    </div>
+
+    <div id="modal-wrapper1" class="modal-wrapper">
+      <div id="modal1" class="modal">
+      </div>
+    </div>
+
+    <div id="modal-wrapper-3D" class="modal-wrapper">
+      <canvas id="canvas-3D" class="modal"></canvas>
+    </div>
   </body>
 </html>

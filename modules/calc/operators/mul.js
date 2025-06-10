@@ -1,3 +1,4 @@
+import { Matrix, ComplexMatrix, Complex, Vector, ComplexVector } from '../classes.js';
 function mul(a, b) {
     if (typeof a === 'undefined' || typeof b === 'undefined') {
         throw new Error(`Invalid arguments: undefined value`);
@@ -8,6 +9,9 @@ function mul(a, b) {
         return a * b;
     if (typeof a === 'string' || typeof b === 'string') {
         throw new Error('Multiplication not supported for strings');
+    }
+    if (a instanceof Complex && (b instanceof Matrix || b instanceof ComplexMatrix || b instanceof Vector || b instanceof ComplexVector)) {
+        return b.mul(a);
     }
     if (typeof a === 'object' && a !== null && typeof a.mul === 'function') {
         return a.mul(b);

@@ -7,9 +7,7 @@ export default function sqrt(x) {
         return Math.sqrt(x);
     }
     if (x instanceof Complex) {
-        const r = pow(x.abs() ** 2, 0.25);
-        const theta = x.arg();
-        return new Complex(r * Math.sin(theta), r * Math.cos(theta));
+        return pow(x, 0.5);
     }
     throw new Error('!!! sqrt invalid type !!! ' + typeof x);
 }

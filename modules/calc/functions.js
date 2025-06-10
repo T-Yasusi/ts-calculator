@@ -5,6 +5,8 @@ export { default as log } from './functions/log.js';
 export { default as exp } from './functions/exp.js';
 export { default as pow } from './functions/pow.js';
 export { default as abs } from './functions/abs.js';
+export { default as abs2 } from './functions/abs2.js';
+export { default as conj } from './functions/conj.js';
 export { default as sqrt } from './functions/sqrt.js';
 export { default as sinh } from './functions/sinh.js';
 export { default as cosh } from './functions/cosh.js';

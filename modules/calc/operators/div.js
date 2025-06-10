@@ -22,6 +22,7 @@ function div(a, b) {
     if (typeof a === 'object' && a !== null && typeof a.div === 'function') {
         return a.div(b);
     }
+    console.log('a =', a, 'b =', b);
     // 非可換のため b.div(a) は許可しない
     throw new Error(`Invalid operand types: ${typeof a} / ${typeof b} — only (number/number), (bigint/bigint), or .div() (from first operand only) are allowed`);
 }
